@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chat em Tempo Real</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html, body {
+        height: 100%;
+        background: #f4f6f8;
+        font-family: "Segoe UI", Roboto, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .chat-container {
+        width: 50vw;
+        height: 95vh;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .chat-header {
+        background: #2563eb;
+        color: white;
+        padding: 16px;
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+
+      .messages {
+        flex: 1;
+        padding: 16px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .messages li {
+        list-style: none;
+        background: #e5e7eb;
+        margin-bottom: 10px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        word-wrap: break-word;
+        max-width: 80%;
+      }
+
+      .messages li.user {
+        background: #2563eb;
+        color: white;
+        align-self: flex-end;
+        text-align: right;
+      }
+
+      .input-area {
+        display: flex;
+        padding: 12px;
+        border-top: 1px solid #ddd;
+        background: #f9fafb;
+        flex-shrink: 0;
+      }
+
+      .input-area input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        font-size: 1rem;
+      }
+
+      .input-area button {
+        margin-left: 10px;
+        background: #2563eb;
+        border: none;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.2s;
+      }
+
+      .input-area button:hover {
+        background: #1e40af;
+      }
+
+      .messages::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .messages::-webkit-scrollbar-thumb {
+        background-color: #bbb;
+        border-radius: 4px;
+      }
+
+      .messages::-webkit-scrollbar-thumb:hover {
+        background-color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chat-container">
+      <div class="chat-header">Chat em Tempo Real</div>
+      <ul class="messages" id="messages"></ul>
+      <div class="input-area">
+        <input
+          id="msg"
+          type="text"
+          placeholder="Digite sua mensagem..."
+          autocomplete="off"
+        />
+        <button onclick="enviar()">Enviar</button>
+      </div>
+    </div>
+
+    <script>
+      const socket = io();
+      const nomeUsuario = window.location.pathname.replace("/", "") || "guest";
+      const messages = document.getElementById("messages");
+
+      function enviar() {
+        const input = document.getElementById("msg");
+        const texto = input.value.trim();
+        if (texto === "") return;
+        const mensagem = `${nomeUsuario}: ${texto}`;
+        socket.emit("chat message", mensagem);
+        input.value = "";
+      }
+
+      socket.on("chat message", function (msg) {
+        const li = document.createElement("li");
+        li.textContent = msg;
+        if (msg.startsWith(nomeUsuario + ":")) {
+          li.classList.add("user");
+        }
+        messages.appendChild(li);
+        messages.scrollTop = messages.scrollHeight; // scroll automático
+      });
+    </script>
+  </body>
+</html>
