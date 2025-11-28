@@ -82,7 +82,6 @@ A arquitetura acima ilustra duas instâncias de aplicação (`app1` e `app2`) co
 
 ### Pré‑requisitos
 
-- **Node.js** e **npm** instalados caso deseje executar localmente sem Docker.
 - **Docker** e **Docker Compose** (versão 2.0 ou superior) para ambiente em contêineres.
 
 ### Clonando o repositório
@@ -91,22 +90,6 @@ A arquitetura acima ilustra duas instâncias de aplicação (`app1` e `app2`) co
 git clone https://github.com/giovannipereiradev/live-web-chat.git
 cd live-web-chat
 ```
-
-### Executando localmente (Node.js)
-
-1. Acesse a pasta `src`:
-   ```bash
-   cd src
-   ```
-2. Instale as dependências:
-   ```bash
-   npm install
-   ```
-3. Inicie o servidor:
-   ```bash
-   node app.js
-   ```
-4. Abra seu navegador e acesse `http://localhost:1234/seu-nome` ou `http://localhost:5678/seu-nome`, 
 
 ### Executando com Docker Compose
 
